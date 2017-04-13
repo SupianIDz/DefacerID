@@ -15,6 +15,9 @@ Unrestricted Information Mirror Deface
 Jangan suka ngaku ngaku buatan sendiri ya :)
 
 # Author
+
 Backend : SupianID
-Theme : Risman ID
-Lumen Framework : Taylor, dan om om hebat lainnya.
+
+Frontend : Risman ID
+
+Framework : Taylor, dan om om hebat lainnya.
