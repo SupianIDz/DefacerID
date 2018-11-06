@@ -5,6 +5,8 @@ Unrestricted Information Mirror Deface
 
 `git clone https://github.com/SupianID/DefacerID.git`
 
+`cd DefacerID/private`
+
 `composer update`
 
 `artisan migrate`
@@ -16,8 +18,8 @@ Jangan suka ngaku ngaku buatan sendiri ya :)
 
 # Author
 
-Backend : SupianID
+Backend : Supian M
 
-Frontend : Risman ID
+Frontend : Risman ID (https://defacer.id)
 
-Framework : Taylor, dan om om hebat lainnya.
+Framework : Lumen Framework (https://lumen.laravel.com)

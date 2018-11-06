@@ -12,10 +12,10 @@ class SettingsSeeder extends Seeder
     public function run()
     {
         \App\Database\Settings::create([
-			'title'       => 'Priv Code',
-			'subtitle'    => 'Private Web Service',
-			'description' => 'Unrestricted Information',
-			'keywords'    => 'Unrestricted Information'
+            'title'       => 'Priv Code',
+            'subtitle'    => 'Private Web Service',
+            'description' => 'Unrestricted Information',
+            'keywords'    => 'Unrestricted Information'
         ]);
     }
 }

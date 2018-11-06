@@ -14,28 +14,24 @@
 $app->get('/', 'PrivCode@main');
 
 $app->group(['prefix' => 'archive'], function () use ($app) {
-
-	$app->get('/', 'PrivCode@archive');
-	$app->get('/onhold', 'PrivCode@onhold');
-	$app->get('/special', 'PrivCode@special');
+    $app->get('/', 'PrivCode@archive');
+    $app->get('/onhold', 'PrivCode@onhold');
+    $app->get('/special', 'PrivCode@special');
 });
 
 $app->group(['prefix' => 'rank'], function () use ($app) {
-	
-	$app->get('/attacker', 'PrivCode@attackerRank');
-	$app->get('/team', 'PrivCode@teamRank');
+    $app->get('/attacker', 'PrivCode@attackerRank');
+    $app->get('/team', 'PrivCode@teamRank');
 });
 
 $app->group(['prefix' => 'notify'], function () use ($app) {
-	
-	$app->get('/', 'PrivCode@notify');
-	$app->post('/action', 'PrivCode@action');
+    $app->get('/', 'PrivCode@notify');
+    $app->post('/action', 'PrivCode@action');
 });
 
 $app->group(['prefix' => 'view'], function () use ($app) {
-	$app->get('/mirror/{id}', 'PrivCode@view');
-	$app->get('/source/{id}', 'PrivCode@source');
-	
+    $app->get('/mirror/{id}', 'PrivCode@view');
+    $app->get('/source/{id}', 'PrivCode@source');
 });
 
 $app->get('/test', 'PrivCode@test');

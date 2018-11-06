@@ -12,20 +12,20 @@ class GeolocationsSeeder extends Seeder
     public function run()
     {
         $locations = array(
-        	'ID'	=> 'Indonesia',
-        	'MY'	=> 'Malaysia',
-        	'US'	=> 'United States',
-        	'UK'	=> 'United Kingdom',
-        	'IL'	=> 'Israel',
-  			  'GR'	=> 'Germany'
+            'ID'	=> 'Indonesia',
+            'MY'	=> 'Malaysia',
+            'US'	=> 'United States',
+            'UK'	=> 'United Kingdom',
+            'IL'	=> 'Israel',
+              'GR'	=> 'Germany'
         );
 
         foreach ($locations as $code => $country) {
-        	\App\Database\Geolocations::create([
-				'id'   => NULL,
-				'name' => $country,
-				'code' => $code
-        	]);
+            \App\Database\Geolocations::create([
+                'id'   => null,
+                'name' => $country,
+                'code' => $code
+            ]);
         }
     }
 }

@@ -10,16 +10,16 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run()
-    {	
-    	$tables = array(
-    		'Settings',
-    		'Concepts',
+    {
+        $tables = array(
+            'Settings',
+            'Concepts',
             /*'Notifiers',
             'Teams',
             'Archives'*/
-    		);
+            );
         foreach ($tables as $table) {
-        	$this->call($table.'Seeder');
+            $this->call($table.'Seeder');
         }
     }
 }

@@ -12,19 +12,19 @@ class ConceptsSeeder extends Seeder
     public function run()
     {
         $concepts = array(
-        	'Admin Poor Password',
-        	'Brute Force',
-        	'DNS Hijacking',
-        	'File Inclusion',
-        	'SQL Injection',
-        	'Social Engineering',
-        	'Others'
+            'Admin Poor Password',
+            'Brute Force',
+            'DNS Hijacking',
+            'File Inclusion',
+            'SQL Injection',
+            'Social Engineering',
+            'Others'
         );
         foreach ($concepts as $value) {
-        	\App\Database\Concepts::create([
-				'id'    => NULL,
-				'title' => $value
-        	]);
+            \App\Database\Concepts::create([
+                'id'    => null,
+                'title' => $value
+            ]);
         }
     }
 }

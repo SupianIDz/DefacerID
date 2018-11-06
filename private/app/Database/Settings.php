@@ -8,10 +8,11 @@ class Settings extends Model
 {
     public $timestamps = false;
 
-    public static function get($column = array('*')){
-    	foreach (self::select($column)->get() as $key => $value) {
-    		$value;
-    	}
-    	return $value;
+    public static function get($column = array('*'))
+    {
+        foreach (self::select($column)->get() as $key => $value) {
+            $value;
+        }
+        return $value;
     }
 }

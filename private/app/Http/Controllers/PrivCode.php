@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Database\Settings;
-use App\Database\Archives; 
+use App\Database\Archives;
 use App\Database\Notifiers;
 use App\Database\Teams;
 use App\Database\Concepts;
 
 class PrivCode extends Controller
-{	
-
-	public function main(){
+{
+    public function main()
+    {
         $setting   = Settings::get();
         $notifiers = Notifiers::orderBy('published', 'desc')->offset(0)->limit(10)->get();
         $teams     = Teams::orderBy('published', 'desc')->offset(0)->limit(10)->get();
@@ -21,30 +21,34 @@ class PrivCode extends Controller
         $onholds   = Archives::where('status', '0')->orderBy('datetime', 'desc')->offset(0)->limit(10)->get();
 
         return view('main', compact('setting', 'archives', 'notifiers', 'teams', 'specials', 'onholds'));
-	}
+    }
 
-    public function archive(){
+    public function archive()
+    {
         $title = 'Archives';
-    	$setting  = Settings::get();
+        $setting  = Settings::get();
         $archives = Archives::where('status', '1')->where('special', '0')->orderBy('datetime', 'desc')->paginate(30);
         return view('archive', compact('setting', 'archives', 'title'));
     }
 
-    public function special(){
+    public function special()
+    {
         $title = 'Special Archives';
-    	$setting  = Settings::get();
+        $setting  = Settings::get();
         $archives = Archives::where('status', '1')->where('special', '1')->orderBy('datetime', 'desc')->paginate(30);
         return view('archive', compact('setting', 'archives', 'title'));
     }
     
-    public function onhold(){
+    public function onhold()
+    {
         $title = 'Onholds';
         $setting  = Settings::get();
         $archives = Archives::where('status', '0')->orderBy('datetime', 'desc')->paginate(30);
         return view('archive', compact('setting', 'archives', 'title'));
     }
 
-    public function attackerRank(){
+    public function attackerRank()
+    {
         $setting  = Settings::get();
         $attackers = Notifiers::orderBy('published', 'desc')->paginate(30);
         $countofattacker = Notifiers::count();
@@ -52,22 +56,25 @@ class PrivCode extends Controller
         return view('rank.attacker', compact('setting', 'attackers', 'countofattacker', 'countofteam'));
     }
 
-    public function teamRank(){
+    public function teamRank()
+    {
         $setting  = Settings::get();
         $teams = Teams::orderBy('published', 'desc')->paginate(30);
         $countofteam = Teams::count();
         return view('rank.team', compact('setting', 'teams', 'countofteam'));
     }
 
-    public function notify(){
+    public function notify()
+    {
         $setting  = Settings::get();
         $concepts = Concepts::get();
         return view('notify', compact('setting', 'concepts'));
     }
 
-    public function view($id){
+    public function view($id)
+    {
         $id = (int)$id;
-        if($id == 0){
+        if ($id == 0) {
             $id = 1;
         }
         $setting  = Settings::get();
@@ -77,10 +84,11 @@ class PrivCode extends Controller
         return view('view', compact('setting', 'archive', 'id'));
     }
 
-    public function source($id){
+    public function source($id)
+    {
         $id = (int)$id;
         
-        if($id == 0){
+        if ($id == 0) {
             $id = 1;
         }
 
@@ -89,7 +97,8 @@ class PrivCode extends Controller
         }
     }
 
-    public function action(Request $request){
+    public function action(Request $request)
+    {
         $attacker = trim(strip_tags($request->attacker));
         $team     = trim(strip_tags($request->team));
         $url      = trim(strip_tags($request->url));
@@ -100,7 +109,7 @@ class PrivCode extends Controller
 
         // Check XSS, Fake Root
         $arrayDenied = array('/~', '<script>', '<h1>');
-        if(inStr($url, $arrayDenied)){
+        if (inStr($url, $arrayDenied)) {
             return response()->json([
                 'url' => $url,
                 'status' => 'Failed',
@@ -113,7 +122,7 @@ class PrivCode extends Controller
         $domain   = preg_replace('/^www\./', '', $urlParts['host']);
 
         $redeface = 0;
-        if(Archives::select(['id'])->where('domain', $domain)->count() > 0){
+        if (Archives::select(['id'])->where('domain', $domain)->count() > 0) {
             return response()->json([
                 'url' => $url,
                 'status' => 'Failed',
@@ -124,7 +133,7 @@ class PrivCode extends Controller
 
         $response = \Curl::to($url)->withOption('HEADER', true)->get();
 
-        if(!inStr($response, '200 OK')){
+        if (!inStr($response, '200 OK')) {
             return response()->json([
                 'url' => $url,
                 'status' => 'Failed',
@@ -132,10 +141,10 @@ class PrivCode extends Controller
             ]);
         }
 
-        if(inStr($response, $attacker)){
+        if (inStr($response, $attacker)) {
             $status = 1;
         } else {
-            if(defaced($response)){
+            if (defaced($response)) {
                 $status = 0;
             } else {
                 return response()->json([
@@ -162,19 +171,19 @@ class PrivCode extends Controller
 
         
         $mass = 0;
-        if(Archives::select(['id'])->where('ip', $ip)->count() > 0){
+        if (Archives::select(['id'])->where('ip', $ip)->count() > 0) {
             $mass = 1;
         }
         $home    = (home(parse_url($url, PHP_URL_PATH))) ? 1 : 0;
         $special = important($domain) ? 1 : 0;
         
         $tbnotifier = Notifiers::where('notifier', $attacker)->limit(1)->get();
-        if($tbnotifier->count() == 0) {
+        if ($tbnotifier->count() == 0) {
             $notifiers            = new Notifiers;
-            $notifiers->id        = NULL;
+            $notifiers->id        = null;
             $notifiers->notifier  = $attacker;
             $notifiers->team      = $team;
-            $notifiers->home      = $home; 
+            $notifiers->home      = $home;
             $notifiers->special   = $special;
             $notifiers->mass      = $mass;
             $notifiers->published = $status;
@@ -192,11 +201,11 @@ class PrivCode extends Controller
         }
 
         $tbteam = Teams::where('team', $team)->limit(1)->get();
-        if($tbteam->count() == 0) {
+        if ($tbteam->count() == 0) {
             $teams            = new Teams;
-            $teams->id        = NULL;
+            $teams->id        = null;
             $teams->team      = $team;
-            $teams->home      = $home; 
+            $teams->home      = $home;
             $teams->special   = $special;
             $teams->mass      = $mass;
             $teams->published = $status;
@@ -218,29 +227,29 @@ class PrivCode extends Controller
         );
 
         $archive                = new Archives;
-        $archive->id            = NULL;
-        $archive->notifier      = $attacker; 
-        $archive->team          = $team; 
+        $archive->id            = null;
+        $archive->notifier      = $attacker;
+        $archive->team          = $team;
         $archive->url           = $url;
         $archive->domain        = $domain;
         $archive->ip            = $ip;
-        $archive->concept       = $request->poc; 
+        $archive->concept       = $request->poc;
         $archive->technology    = json_encode([
-                                    'os'     => $os[array_rand($os)], 
+                                    'os'     => $os[array_rand($os)],
                                     'server' => server($response)
                                   ]);
         $archive->geolocation   = json_encode([
-                                        'country' => ($ipdetail->geoplugin_countryName) ? $ipdetail->geoplugin_countryName : 'Unknown', 
+                                        'country' => ($ipdetail->geoplugin_countryName) ? $ipdetail->geoplugin_countryName : 'Unknown',
                                         'code'    => ($ipdetail->geoplugin_countryCode) ? $ipdetail->geoplugin_countryCode : 'Unknown'
-                                  ]); 
+                                  ]);
         $archive->content  = $content;
         $archive->home     = (string)$home;
         $archive->special  = (string)$special;
         $archive->mass     = (string)$mass;
-        $archive->redeface = (string)$redeface; 
-        $archive->status   = (string)$status; 
-        $archive->datetime = \Carbon\Carbon::now(); 
-        if($archive->save()) {
+        $archive->redeface = (string)$redeface;
+        $archive->status   = (string)$status;
+        $archive->datetime = \Carbon\Carbon::now();
+        if ($archive->save()) {
             return response()->json([
                 'url' => $url,
                 'status' => 'Success',
@@ -253,7 +262,5 @@ class PrivCode extends Controller
                 'extra' => 'Please Contact Administrator'
             ]);
         }
-        
     }
-
 }
