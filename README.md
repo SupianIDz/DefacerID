@@ -7,19 +7,10 @@ Unrestricted Information Mirror Deface
 
 `cd DefacerID/private`
 
-`composer update`
+`composer install`
 
-`artisan migrate`
+`cp .env.example .env`
 
-`artisan db:seed`
+`php artisan migrate`
 
-# Lamer Harap Dikondisikan
-Jangan suka ngaku ngaku buatan sendiri ya :)
-
-# Author
-
-Backend : Supian M
-
-Frontend : Risman ID (https://defacer.id)
-
-Framework : Lumen Framework (https://lumen.laravel.com)
+`php artisan db:seed`
